@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Lifestyle — Budget App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #0d9488; --neutral-bg: #F7F4EF; --neutral-surface: #ffffff; --neutral-card: #f5f4f2; --neutral-border: #e8e6e3; --text: #1c1917; --text-muted: #57534e; --nav-height: 64px; --safe-bottom: env(safe-area-inset-bottom, 0); --phone-max: 390px; --accent: #eab308; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #e8e6e3; color: var(--text); min-height: 100vh; display: flex; justify-content: center; }
+    .phone-frame { width: 100%; max-width: var(--phone-max); min-height: 100vh; background: var(--neutral-bg); position: relative; padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px); }
+    .status-bar { height: 44px; display: flex; align-items: center; padding: 0 24px; font-size: 15px; font-weight: 600; }
+    .page-header { display: flex; align-items: center; justify-content: center; position: relative; padding: 12px 20px 16px; }
+    .page-header .back { position: absolute; left: 20px; background: none; border: none; padding: 8px; cursor: pointer; color: var(--text); text-decoration: none; }
+    .page-header .back svg { width: 24px; height: 24px; }
+    .page-header h1 { font-size: 18px; font-weight: 700; text-align: center; }
+    .page-header .btn-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--neutral-card); color: var(--text); display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .page-header .btn-icon svg { width: 24px; height: 24px; }
+    .fab { position: fixed; bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px); right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--primary); color: var(--white); display: flex; align-items: center; justify-content: center; z-index: 10; text-decoration: none; }
+    .fab svg { width: 28px; height: 28px; }
+    .breakdown-card { background: var(--neutral-surface); border-radius: 16px; padding: 20px; margin: 0 20px 20px; border: 1px solid var(--neutral-border); box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .breakdown-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; margin-bottom: 16px; }
+    .breakdown-figures { flex: 1; min-width: 0; }
+    .breakdown-figures p { font-size: 15px; color: var(--text); margin-bottom: 4px; }
+    .breakdown-figures p strong { font-weight: 700; }
+    .breakdown-pig { width: 80px; height: 80px; flex-shrink: 0; border-radius: 12px; background: var(--neutral-card); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .breakdown-pig img { width: 64px; height: 64px; object-fit: contain; }
+    .breakdown-bar-wrap { margin: 12px 0 6px; }
+    .breakdown-bar { height: 8px; background: var(--neutral-card); border-radius: 4px; overflow: hidden; }
+    .breakdown-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); } /* bar matches pig outfit */
+    .breakdown-bar-label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+    .section-heading { font-size: 17px; font-weight: 700; padding: 0 20px 12px; color: var(--text); }
+    .activity-list { padding: 0 20px; }
+    .activity-item { background: var(--neutral-surface); border-radius: 12px; padding: 14px 16px; margin-bottom: 8px; border: 1px solid var(--neutral-border); display: flex; justify-content: space-between; align-items: center; }
+    .activity-item span:last-child { font-weight: 700; color: var(--text); }
+    .add-to-category { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 20px 20px 0; padding: 14px 20px; background: var(--neutral-surface); border: 1px solid var(--neutral-border); border-radius: 12px; font-size: 15px; font-weight: 600; color: var(--text); text-decoration: none; }
+    .add-to-category:hover { background: var(--neutral-card); }
+    .bottom-nav { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: var(--phone-max); height: calc(var(--nav-height) + var(--safe-bottom)); padding-bottom: var(--safe-bottom); background: var(--white); border-top: 1px solid var(--neutral-border); display: flex; justify-content: space-around; align-items: flex-start; padding-top: 10px; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; color: #6b7280; padding: 4px 12px; text-decoration: none; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item svg { width: 24px; height: 24px; }
+    .nav-item.active svg { stroke: var(--primary); fill: var(--primary); }
+    .nav-item:not(.active) svg { stroke: #6b7280; fill: none; }
+    .nav-item.active .nav-icon-home { fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-home { fill: #6b7280; }
+    .nav-item.active .nav-icon-goals { stroke: var(--primary); fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-goals { stroke: #6b7280; fill: none; }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+    <header class="page-header">
+      <a href="budget.html" class="back" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></a>
+      <h1>Lifestyle</h1>
+    </header>
+    <a href="budget.html?add=1" class="fab" aria-label="Add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></a>
+    <main>
+      <section class="breakdown-card">
+        <div class="breakdown-top">
+          <div class="breakdown-figures">
+            <p>Left to spend: <strong>$300</strong></p>
+            <p>Budgeted: <strong>$600</strong></p>
+            <p>Spent: <strong>$300</strong></p>
+          </div>
+          <div class="breakdown-pig"><img src="assets/pig-sweater.png" alt=""></div>
+        </div>
+        <div class="breakdown-bar-wrap">
+          <div class="breakdown-bar">
+            <div class="breakdown-bar-fill" style="width: 50%;"></div>
+          </div>
+          <p class="breakdown-bar-label">$300 left of $600</p>
+        </div>
+      </section>
+      <h2 class="section-heading">Recent Activity</h2>
+      <div class="activity-list">
+        <div class="activity-item"><span>Gym</span><span>-$80</span></div>
+        <div class="activity-item"><span>Streaming</span><span>-$45</span></div>
+        <div class="activity-item"><span>Books</span><span>-$35</span></div>
+      </div>
+      <a href="#" class="add-to-category">+ Add to Lifestyle</a>
+    </main>
+    <nav class="bottom-nav" aria-label="Main">
+      <a href="index.html" class="nav-item"><svg class="nav-icon-home" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2L2 10v12h8v-7h4v7h8V10L12 2z"/></svg>Home</a>
+      <a href="budget.html" class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8" stroke-width="4"/></svg>Budget</a>
+      <a href="goals.html" class="nav-item"><svg class="nav-icon-goals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2" fill="currentColor"/></svg>Goals</a>
+      <a href="insights.html" class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="2 18 6 14 10 18 14 10 18 14 22 6"/></svg>Insights</a>
+    </nav>
+  </div>
+</body>
+</html>

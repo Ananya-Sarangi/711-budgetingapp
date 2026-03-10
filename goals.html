@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Goals — Budget App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0d9488;
+      --primary-light: #5eead4;
+      --primary-dark: #0f766e;
+      --neutral-bg: #F7F4EF;
+      --neutral-surface: #ffffff;
+      --neutral-card: #f5f4f2;
+      --neutral-border: #e8e6e3;
+      --text: #1c1917;
+      --text-muted: #57534e;
+      --white: #ffffff;
+      --savings-green: #16a34a;
+      --nav-height: 64px;
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+      --phone-max: 390px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #e8e6e3;
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+    .phone-frame {
+      width: 100%;
+      max-width: var(--phone-max);
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--neutral-bg);
+      position: relative;
+      margin: 0 auto;
+      padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px);
+      box-shadow: 0 0 0 1px var(--neutral-border);
+    }
+    @media (min-width: 391px) {
+      body { padding: 24px 0; background: #78716c; }
+      .phone-frame { border-radius: 36px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; }
+    }
+    .status-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .goals-header {
+      position: relative;
+      text-align: center;
+      padding: 16px 20px 16px;
+    }
+    .goals-header h1 {
+      font-family: inherit;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .goals-header .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.4;
+      text-align: center;
+    }
+    .btn-add-goal {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 24px;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .btn-add-goal svg { width: 20px; height: 20px; }
+    .goals-content { padding: 0 20px 100px; }
+    .goal-card {
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--neutral-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .goal-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .goal-card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .goal-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: #bae6fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .goal-icon .plane-emoji {
+      font-size: 22px;
+      line-height: 1;
+      display: block;
+      text-align: center;
+    }
+    .goal-card h2 { font-size: 17px; font-weight: 700; color: var(--text); }
+    .goal-tag {
+      padding: 4px 12px;
+      background: rgba(13,148,136,0.15);
+      color: var(--primary-dark);
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+    }
+    .goal-amount {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .goal-amount span { font-weight: 400; color: var(--text-muted); font-size: 16px; }
+    .goal-progress-bar {
+      height: 8px;
+      background: var(--neutral-card);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .goal-progress-fill {
+      height: 100%;
+      width: 10%;
+      background: var(--primary);
+      border-radius: 4px;
+    }
+    .goal-pct { font-size: 13px; color: var(--text-muted); }
+    .scenarios-heading {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+    .scenarios-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .scenario-card {
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--neutral-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .scenario-card.highlighted { border-color: rgba(13,148,136,0.3); background: rgba(13,148,136,0.04); }
+    .scenario-card-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .scenario-card.highlighted .scenario-card-title {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(13,148,136,0.15);
+      color: var(--primary-dark);
+      border-radius: 8px;
+    }
+    .scenario-illustration {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      object-fit: cover;
+      background: var(--neutral-card);
+    }
+    .scenario-goal {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .scenario-goal strong { font-weight: 700; }
+    .scenario-tip {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding: 0 0 12px;
+    }
+    .preview-card {
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 24px;
+      border: 1px solid var(--neutral-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .preview-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 15px;
+      color: var(--text);
+    }
+    .preview-row:not(:last-child) { border-bottom: 1px solid var(--neutral-border); }
+    .preview-row .value { font-weight: 600; }
+    .preview-row .value.savings { color: var(--savings-green); }
+    .slide-instruction {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      padding: 0;
+    }
+    .slider-card {
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin-bottom: 16px;
+      border: 1px solid var(--neutral-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .slider-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+    .slider-card-header h3 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+    }
+    .slider-card-header .current-value {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .slider-wrap {
+      position: relative;
+      padding: 0 0 4px;
+    }
+    .slider-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    input[type="range"] {
+      width: 100%;
+      height: 22px;
+      margin: 0;
+      padding: 7px 0;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+      border-radius: 4px;
+      outline: none;
+      box-sizing: border-box;
+      display: block;
+    }
+    input[type="range"]::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--primary) 0%, var(--primary) var(--slider-pct), var(--neutral-card) var(--slider-pct));
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      margin-top: -7px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(13,148,136,0.4);
+    }
+    input[type="range"]::-moz-range-track {
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(to right, var(--primary) 0%, var(--primary) var(--slider-pct), var(--neutral-card) var(--slider-pct));
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 6px rgba(13,148,136,0.4);
+    }
+    .fab {
+      position: fixed;
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      box-shadow: 0 4px 14px rgba(13,148,136,0.4);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .fab svg { width: 28px; height: 28px; }
+    @media (min-width: 391px) {
+      .fab { right: calc(50% - var(--phone-max) / 2 + 20px); }
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--phone-max);
+      height: calc(var(--nav-height) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: var(--white);
+      border-top: 1px solid var(--neutral-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+    @media (min-width: 391px) { .bottom-nav { border-radius: 0 0 36px 36px; } }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 4px 12px;
+      text-decoration: none;
+    }
+    .nav-item.active { color: var(--primary); }
+    .nav-item svg { width: 24px; height: 24px; }
+    .nav-item.active svg { stroke: var(--primary); fill: var(--primary); }
+    .nav-item:not(.active) svg { stroke: #6b7280; fill: none; }
+    .nav-item.active .nav-icon-home { fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-home { fill: #6b7280; }
+    .nav-item.active .nav-icon-goals { stroke: var(--primary); fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-goals { stroke: #6b7280; fill: none; }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+
+    <header class="goals-header">
+      <h1>Goals</h1>
+      <p class="subtitle">Explore how spending changes affect your goals.</p>
+      <button type="button" class="btn-add-goal">+ Add goal</button>
+    </header>
+
+    <main class="goals-content">
+      <article class="goal-card">
+        <div class="goal-card-top">
+          <div class="goal-card-title">
+            <div class="goal-icon"><span class="plane-emoji" aria-hidden="true">✈️</span></div>
+            <h2>Trip fund</h2>
+          </div>
+          <span class="goal-tag">On track</span>
+        </div>
+        <p class="goal-amount">$120 <span>/ $1,200</span></p>
+        <div class="goal-progress-bar">
+          <div class="goal-progress-fill" style="width: 10%;"></div>
+        </div>
+        <p class="goal-pct">10% of goal</p>
+      </article>
+
+      <h2 class="section-title">ADJUST BUDGET BY CATEGORY</h2>
+      <p class="slide-instruction">Slide to see how changes affect your savings.</p>
+      <section class="slider-card slider-entertainment">
+        <div class="slider-card-header">
+          <h3>Entertainment</h3>
+          <span class="current-value">$200</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" min="0" max="400" value="200" style="--slider-pct: 50%" aria-label="Entertainment budget $200">
+          <div class="slider-labels">
+            <span>$0</span>
+            <span>$400</span>
+          </div>
+        </div>
+      </section>
+      <section class="slider-card slider-eating">
+        <div class="slider-card-header">
+          <h3>Eating out</h3>
+          <span class="current-value">$250</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" min="0" max="500" value="250" style="--slider-pct: 50%" aria-label="Eating out budget $250">
+          <div class="slider-labels">
+            <span>$0</span>
+            <span>$500</span>
+          </div>
+        </div>
+      </section>
+      <section class="slider-card slider-travel">
+        <div class="slider-card-header">
+          <h3>Travel</h3>
+          <span class="current-value">$100</span>
+        </div>
+        <div class="slider-wrap">
+          <input type="range" min="0" max="300" value="100" style="--slider-pct: 33.33%" aria-label="Travel budget $100">
+          <div class="slider-labels">
+            <span>$0</span>
+            <span>$300</span>
+          </div>
+        </div>
+      </section>
+
+      <h2 class="scenarios-heading">Scenarios</h2>
+      <div class="scenarios-grid">
+        <article class="scenario-card">
+          <h3 class="scenario-card-title">Current path</h3>
+          <img src="assets/scenarios-illustration.png" alt="" class="scenario-illustration">
+          <p class="scenario-goal">Save up for Miami in <strong>4 months</strong></p>
+          <p class="scenario-tip">Reduce dining and entertainment by about 25%</p>
+        </article>
+        <article class="scenario-card highlighted">
+          <h3 class="scenario-card-title">Recommended approach</h3>
+          <img src="assets/scenarios-illustration.png" alt="" class="scenario-illustration">
+          <p class="scenario-goal">Save up for Miami in <strong>3 months</strong></p>
+          <p class="scenario-tip">Reduce dining and entertainment by about 25%</p>
+        </article>
+      </div>
+    </main>
+
+    <a href="budget.html?add=1" class="fab" aria-label="Add">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </a>
+
+    <nav class="bottom-nav" aria-label="Main">
+      <a href="index.html" class="nav-item">
+        <svg class="nav-icon-home" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M12 2L2 10v12h8v-7h4v7h8V10L12 2z"/>
+        </svg>
+        Home
+      </a>
+      <a href="budget.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="8" stroke-width="4"/>
+        </svg>
+        Budget
+      </a>
+      <a href="goals.html" class="nav-item active" aria-current="page">
+        <svg class="nav-icon-goals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="6"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+        Goals
+      </a>
+      <a href="insights.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="2 18 6 14 10 18 14 10 18 14 22 6"/>
+        </svg>
+        Insights
+      </a>
+    </nav>
+  </div>
+  <script>
+    function updateSliderCard(card) {
+      var input = card.querySelector('input[type="range"]');
+      var valueSpan = card.querySelector('.current-value');
+      if (!input || !valueSpan) return;
+      var val = Number(input.value);
+      var min = Number(input.min);
+      var max = Number(input.max);
+      var pct = max > min ? ((val - min) / (max - min)) * 100 : 0;
+      valueSpan.textContent = '$' + val;
+      input.style.setProperty('--slider-pct', pct + '%');
+      input.setAttribute('aria-label', input.closest('.slider-card').querySelector('h3').textContent + ' budget $' + val);
+    }
+    document.querySelectorAll('.slider-card').forEach(function(card) {
+      var input = card.querySelector('input[type="range"]');
+      if (!input) return;
+      updateSliderCard(card);
+      input.addEventListener('input', function() { updateSliderCard(card); });
+      input.addEventListener('change', function() { updateSliderCard(card); });
+    });
+  </script>
+</body>
+</html>

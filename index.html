@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>February Overview — Budget App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    /* First ref content; second ref background (cream, white cards) */
+    :root {
+      --primary: #0d9488;
+      --primary-light: #5eead4;
+      --primary-dark: #0f766e;
+      --accent: #f59e0b;
+      --progress-orange: #F19B21;
+      --progress-orange-light: #FFCA60;
+      --neutral-bg: #F7F4EF;
+      --neutral-surface: #ffffff;
+      --neutral-card: #f5f4f2;
+      --neutral-border: #e8e6e3;
+      --neutral-muted: #a8a29e;
+      --text: #1c1917;
+      --text-muted: #57534e;
+      --white: #ffffff;
+      --alert: #dc2626;
+      --nav-height: 64px;
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+      --phone-max: 390px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #e8e6e3;
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+    }
+
+    /* Phone screen container — mobile first */
+    .phone-frame {
+      width: 100%;
+      max-width: var(--phone-max);
+      min-height: 100vh;
+      min-height: 100dvh;
+      background: var(--neutral-bg);
+      position: relative;
+      margin: 0 auto;
+      padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 20px);
+      box-shadow: 0 0 0 1px var(--neutral-border);
+    }
+
+    @media (min-width: 391px) {
+      body {
+        padding: 24px 0;
+        background: #78716c;
+      }
+      .phone-frame {
+        border-radius: 36px;
+        box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        overflow: hidden;
+      }
+    }
+
+    /* Status bar */
+    .status-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .header {
+      position: relative;
+      text-align: center;
+      padding: 16px 20px 16px;
+    }
+
+    .header h1 {
+      font-family: inherit;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 0;
+      color: var(--text);
+    }
+    .btn-icon {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: var(--neutral-card);
+      border-radius: 12px;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+    .btn-icon:hover { background: var(--neutral-border); }
+    .btn-icon svg { width: 24px; height: 24px; }
+    .fab {
+      position: fixed;
+      bottom: calc(var(--nav-height) + var(--safe-bottom) + 16px);
+      right: 20px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: var(--white);
+      border: none;
+      box-shadow: 0 4px 14px rgba(13,148,136,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      text-decoration: none;
+    }
+    .fab svg { width: 28px; height: 28px; }
+    @media (min-width: 391px) {
+      .fab { right: calc(50% - var(--phone-max) / 2 + 20px); }
+    }
+
+    .segmented {
+      display: inline-flex;
+      background: var(--neutral-card);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 2px;
+      min-width: 240px;
+    }
+
+    .segmented button {
+      flex: 1;
+      min-width: 0;
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .segmented button.active {
+      background: var(--white);
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+    }
+
+    .card {
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 20px;
+      margin: 0 20px 12px;
+      border: 1px solid var(--neutral-border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+
+    .card h2 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    /* Watch your spending — first ref: $30 left (red), orange bar */
+    .watch-card .summary {
+      font-size: 15px;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .watch-card .summary .amount-left { color: var(--alert); font-weight: 700; }
+    /* Progress bar: 4 coins on the left, rest empty */
+    .progress-outer {
+      height: 16px;
+      background: var(--neutral-card);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 10px;
+    }
+    .progress-coins-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 72px;
+      border-radius: 8px 0 0 8px;
+      overflow: hidden;
+      background-image: url("assets/coin-segment.png");
+      background-repeat: repeat-x;
+      background-size: 18px 16px;
+      background-position: 0 center;
+    }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 0;
+    }
+    .watch-card .progress-labels { margin-bottom: 14px; }
+    .stretch-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stretch-row p {
+      font-size: 14px;
+      color: var(--text);
+      margin: 0;
+      flex: 1;
+      min-width: 0;
+    }
+    .worried-coins {
+      flex-shrink: 0;
+      width: 120px;
+      height: auto;
+    }
+    .worried-coins svg { width: 100%; height: auto; display: block; }
+    /* This week card — teal comparison, takeout visual */
+    .this-week-card .spent { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .this-week-card .comparison { font-size: 14px; color: var(--primary); font-weight: 500; margin-bottom: 4px; }
+    .this-week-card .context { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .takeout-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 0;
+      margin-top: 16px;
+    }
+    .takeout-visual img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    .takeout-caption {
+      font-size: 13px;
+      color: var(--text);
+      text-align: center;
+      margin-top: 10px;
+    }
+    .takeout-caption .highlight {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    /* Bar chart — heights proportional to amounts (max $3,100) */
+    .spending-tabs-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .bar-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 8px;
+      padding-top: 8px;
+    }
+
+    .bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .bar-value {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      min-height: 18px;
+    }
+
+    /* Fixed-height column so bar height % has a clear reference */
+    .bar-column {
+      height: 96px;
+      width: 100%;
+      max-width: 56px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .bar {
+      width: 100%;
+      max-width: 56px;
+      border-radius: 6px 6px 0 0;
+      min-height: 4px;
+      background: var(--primary);
+      opacity: 0.9;
+    }
+
+    /* Heights proportional to amount (max $770): 100%, 51.9%, 39%, 0 */
+    .bar.week1 { height: 100%; }
+    .bar.week2 { height: 51.9%; opacity: 0.9; }
+    .bar.this-week {
+      height: 39%;
+      background: var(--primary-light);
+      opacity: 1;
+    }
+    .bar.week4 {
+      height: 4px;
+      min-height: 4px;
+      background: transparent;
+      border: 2px dashed var(--neutral-muted);
+      opacity: 1;
+    }
+
+    .bar-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Category cards — full-width grid below 2nd card */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0 20px 12px;
+      color: var(--text);
+    }
+
+    .pig-cards-scroll {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 20px 20px;
+    }
+
+    .pig-card {
+      min-width: 0;
+      background: var(--neutral-surface);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid var(--neutral-border);
+    }
+
+    .pig-card-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      min-width: 0;
+    }
+
+    .pig-icon {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      object-fit: contain;
+    }
+
+    .pig-card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .pig-card .progress-outer {
+      height: 8px;
+      margin-bottom: 6px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .pig-card.lifestyle-card .progress-outer { background: #fef9c3; }
+    .pig-card.eating-out-card .progress-outer { background: #ede9fe; }
+
+    .pig-card .progress-outer .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+    }
+    .pig-card .progress-outer .progress-fill.lifestyle {
+      width: 22%;
+      background: #eab308;
+    }
+    .pig-card .progress-outer .progress-fill.eating-out {
+      width: 20%;
+      background: #483d8b;
+    }
+
+    .pig-card .left-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .set-daily {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 14px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary);
+      text-decoration: none;
+      margin: 0 20px 24px;
+      border-radius: 12px;
+      background: var(--neutral-surface);
+      border: 1px solid var(--neutral-border);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .set-daily:hover,
+    .set-daily:focus {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    .set-daily svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Bottom nav — dark grey unselected, black selected */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: var(--phone-max);
+      height: calc(var(--nav-height) + var(--safe-bottom));
+      padding-bottom: var(--safe-bottom);
+      background: var(--white);
+      border-top: 1px solid var(--neutral-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-start;
+      padding-top: 10px;
+    }
+
+    @media (min-width: 391px) {
+      .bottom-nav {
+        border-radius: 0 0 36px 36px;
+      }
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 500;
+      color: #6b7280;
+      cursor: pointer;
+      padding: 4px 12px;
+      text-decoration: none;
+    }
+
+    .nav-item.active {
+      color: var(--primary);
+    }
+
+    .nav-item svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .nav-item.active svg {
+      stroke: var(--primary);
+      fill: var(--primary);
+    }
+
+    .nav-item:not(.active) svg {
+      stroke: #6b7280;
+      fill: none;
+    }
+
+    .nav-item.active .nav-icon-home { fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-home { fill: #6b7280; }
+    .nav-item.active .nav-icon-goals { stroke: var(--primary); fill: var(--primary); }
+    .nav-item:not(.active) .nav-icon-goals { stroke: #6b7280; fill: none; }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+  <div class="status-bar">9:41</div>
+
+  <header class="header">
+    <h1>February Overview</h1>
+  </header>
+
+  <main>
+    <section class="card watch-card">
+      <h2>Watch your spending!</h2>
+      <p class="summary"><span class="amount-left">$30</span> left • 9 days remaining.</p>
+      <div class="progress-outer">
+        <div class="progress-coins-fill" role="img" aria-label="98% of budget spent — coin segments"></div>
+      </div>
+      <div class="progress-labels">
+        <span>$1,470 of $1,500 spent</span>
+        <span>98% of total budget</span>
+      </div>
+      <div class="stretch-row">
+        <p>You'll need to stretch $30 across the next 9 days.</p>
+        <div class="worried-coins" aria-hidden="true">
+          <svg viewBox="0 0 189 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="30.2249" cy="17.3548" r="16.8548" fill="#FFCA60" stroke="#F19B21"/>
+            <circle cx="30.4196" cy="17.5498" r="11.6998" fill="#F19B21"/>
+            <circle cx="94.1834" cy="17.3548" r="16.8548" fill="#FFCA60" stroke="#F19B21"/>
+            <circle cx="94.3786" cy="17.5498" r="11.1998" fill="#F19B21" stroke="#F19B21"/>
+            <circle cx="158.143" cy="17.3548" r="16.8548" fill="#FFCA60" stroke="#F19B21"/>
+            <circle cx="158.338" cy="17.5498" r="11.6998" fill="#F19B21"/>
+            <path d="M25.7396 40.7659C25.7396 42.3813 23.8189 42.9108 21.4496 42.9108C19.0803 42.9108 17.1597 42.3813 17.1597 40.7659C17.1597 39.1505 19.8603 37.0609 22.2296 37.0609C24.5989 37.0609 25.7396 39.1505 25.7396 40.7659Z" fill="#F19B21"/>
+            <path d="M25.1543 33.5395L25.5447 40.5708" stroke="#F19B21"/>
+            <path d="M86.1895 37.5609C87.2089 37.561 87.9474 38.0038 88.4424 38.6205C88.948 39.2505 89.1992 40.0648 89.1992 40.766C89.1992 41.0625 89.1139 41.2889 88.9688 41.474C88.8179 41.6664 88.5813 41.8399 88.2451 41.9847C87.5626 42.2787 86.5712 42.4105 85.4092 42.4105C84.2472 42.4105 83.2558 42.2787 82.5732 41.9847C82.237 41.8399 82.0005 41.6664 81.8496 41.474C81.7044 41.2889 81.6192 41.0626 81.6191 40.766C81.6191 40.4977 81.7339 40.1621 81.9902 39.7885C82.2435 39.4193 82.6136 39.0446 83.0645 38.7084C83.9735 38.0305 85.1391 37.5609 86.1895 37.5609Z" fill="#F19B21" stroke="#F19B21"/>
+            <path d="M89.1133 33.5395L89.5037 40.5708" stroke="#F19B21"/>
+            <path d="M153.658 40.7659C153.658 42.3813 151.737 42.9108 149.368 42.9108C146.999 42.9108 145.078 42.3813 145.078 40.7659C145.078 39.1505 147.779 37.0609 150.148 37.0609C152.517 37.0609 153.658 39.1505 153.658 40.7659Z" fill="#F19B21"/>
+            <path d="M153.073 33.5395L153.463 40.5708" stroke="#F19B21"/>
+            <path d="M34.3195 40.7659C34.3195 42.3813 36.2402 42.9108 38.6095 42.9108C40.9787 42.9108 42.8994 42.3813 42.8994 40.7659C42.8994 39.1505 40.1988 37.0609 37.8295 37.0609C35.4602 37.0609 34.3195 39.1505 34.3195 40.7659Z" fill="#F19B21"/>
+            <path d="M34.9048 33.5395L34.5144 40.5708" stroke="#F19B21"/>
+            <path d="M101.789 37.5609C100.769 37.561 100.031 38.0038 99.5356 38.6205C99.03 39.2505 98.7788 40.0648 98.7788 40.766C98.7788 41.0625 98.8642 41.2889 99.0093 41.474C99.1602 41.6664 99.3967 41.8399 99.7329 41.9847C100.415 42.2787 101.407 42.4105 102.569 42.4105C103.731 42.4105 104.722 42.2787 105.405 41.9847C105.741 41.8399 105.978 41.6664 106.128 41.474C106.274 41.2889 106.359 41.0626 106.359 40.766C106.359 40.4977 106.244 40.1621 105.988 39.7885C105.735 39.4193 105.364 39.0446 104.914 38.7084C104.005 38.0305 102.839 37.5609 101.789 37.5609Z" fill="#F19B21" stroke="#F19B21"/>
+            <path d="M98.8643 33.5395L98.4739 40.5708" stroke="#F19B21"/>
+            <path d="M162.238 40.7659C162.238 42.3813 164.159 42.9108 166.528 42.9108C168.897 42.9108 170.818 42.3813 170.818 40.7659C170.818 39.1505 168.117 37.0609 165.748 37.0609C163.379 37.0609 162.238 39.1505 162.238 40.7659Z" fill="#F19B21"/>
+            <path d="M162.823 33.5395L162.433 40.5708" stroke="#F19B21"/>
+            <circle cx="62.2044" cy="18.5248" r="2.53497" fill="#F19B21"/>
+            <line x1="47.6244" y1="17.0519" x2="60.4942" y2="18.2219" stroke="#F19B21"/>
+            <line y1="-0.5" x2="12.9229" y2="-0.5" transform="matrix(-0.995893 0.0905357 0.0905357 0.995893 76.8286 17.5499)" stroke="#F19B21"/>
+            <circle cx="2.53497" cy="27.8847" r="2.53497" fill="#F19B21"/>
+            <line x1="3.54635" y1="26.3353" x2="12.6853" y2="17.1963" stroke="#F19B21"/>
+            <circle cx="2.53497" cy="2.53497" r="2.53497" transform="matrix(-1 0 0 1 188.537 25.3496)" fill="#F19B21"/>
+            <line y1="-0.5" x2="12.9244" y2="-0.5" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 184.637 26.6887)" stroke="#F19B21"/>
+            <circle cx="126.163" cy="18.5248" r="2.53497" fill="#F19B21"/>
+            <line x1="111.584" y1="17.0519" x2="124.454" y2="18.2219" stroke="#F19B21"/>
+            <line y1="-0.5" x2="12.9229" y2="-0.5" transform="matrix(-0.995893 0.0905357 0.0905357 0.995893 140.788 17.5499)" stroke="#F19B21"/>
+            <path d="M32.6064 22.2916C33.0397 21.7827 34.1347 20.612 34.7204 20.4786C35.3844 20.4292 37.4773 22.573 37.4238 22.9289C37.2351 24.1839 35.1782 21.769 34.8712 21.4276C34.3519 21.5266 33.3201 23.2514 32.5888 23.1858C31.9048 23.1245 30.8445 21.8372 30.3429 21.3902C28.0189 23.8148 28.2417 23.6976 25.948 21.3873C25.3159 21.9618 24.743 22.608 24.0942 23.1623C23.9796 23.2602 23.8748 23.3091 23.7108 23.3015C22.7009 22.925 23.8285 22.166 24.2571 21.7249C24.6272 21.344 25.3011 20.6148 25.8236 20.4884C25.8512 20.4894 25.8788 20.4907 25.9063 20.4922C26.4245 20.5214 26.7039 20.8292 27.0213 21.1464C27.3981 21.523 27.7717 21.8979 28.1565 22.2687C30.5883 19.7895 30.2656 20.0144 32.6064 22.2916Z" fill="black" fill-opacity="0.984314"/>
+            <path d="M96.8642 22.7451C97.2975 22.109 98.3925 20.6456 98.9782 20.4788C99.6423 20.4171 101.735 23.0967 101.682 23.5417C101.493 25.1104 99.436 22.0918 99.129 21.6651C98.6097 21.7888 97.5779 23.9448 96.8466 23.8629C96.1626 23.7862 95.1023 22.1771 94.6007 21.6183C92.2767 24.649 92.4995 24.5026 90.2059 21.6147C89.5737 22.3328 89.0008 23.1406 88.3521 23.8334C88.2374 23.9559 88.1327 24.0169 87.9686 24.0075C86.9587 23.5368 88.0863 22.5881 88.5149 22.0367C88.885 21.5605 89.5589 20.6491 90.0814 20.4911C90.109 20.4923 90.1366 20.4939 90.1641 20.4958C90.6823 20.5323 90.9617 20.917 91.2791 21.3136C91.6559 21.7844 92.0295 22.2529 92.4143 22.7165C94.8461 19.6175 94.5234 19.8985 96.8642 22.7451Z" fill="black" fill-opacity="0.984314"/>
+            <path d="M160.416 22.7451C160.849 22.109 161.944 20.6456 162.53 20.4788C163.194 20.4171 165.287 23.0967 165.233 23.5417C165.045 25.1104 162.988 22.0918 162.681 21.6651C162.161 21.7888 161.13 23.9448 160.398 23.8629C159.714 23.7862 158.654 22.1771 158.152 21.6183C155.828 24.649 156.051 24.5026 153.758 21.6147C153.125 22.3328 152.553 23.1406 151.904 23.8334C151.789 23.9559 151.684 24.0169 151.52 24.0075C150.51 23.5368 151.638 22.5881 152.067 22.0367C152.437 21.5605 153.111 20.6491 153.633 20.4911C153.661 20.4923 153.688 20.4939 153.716 20.4958C154.234 20.5323 154.513 20.917 154.831 21.3136C155.208 21.7844 155.581 22.2529 155.966 22.7165C158.398 19.6175 158.075 19.8985 160.416 22.7451Z" fill="black" fill-opacity="0.984314"/>
+            <path d="M24.4039 12.0042C25.1721 12.049 27.5733 13.5946 28.4597 13.8946C29.3312 14.1895 28.9197 14.9477 28.1867 15.1948C27.4804 15.4329 24.9058 17.0117 24.312 16.9451C23.2679 15.7759 25.8766 15.5845 26.232 15.0123C25.9832 14.8599 23.1936 15.3715 24.2436 14.1085C24.4716 13.8343 26.0578 13.9977 26.4215 14.03C25.8294 13.6513 23.2072 12.8331 24.4039 12.0042Z" fill="black" fill-opacity="0.988235"/>
+            <path d="M87.9556 12.0042C88.7238 12.049 91.1251 13.5946 92.0115 13.8946C92.883 14.1895 92.4715 14.9477 91.7384 15.1948C91.0322 15.4329 88.4575 17.0117 87.8637 16.9451C86.8196 15.7759 89.4283 15.5845 89.7838 15.0123C89.535 14.8599 86.7453 15.3715 87.7954 14.1085C88.0234 13.8343 89.6095 13.9977 89.9733 14.03C89.3812 13.6513 86.7589 12.8331 87.9556 12.0042Z" fill="black" fill-opacity="0.988235"/>
+            <path d="M152.213 12.0042C152.982 12.049 155.383 13.5946 156.269 13.8946C157.141 14.1895 156.729 14.9477 155.996 15.1948C155.29 15.4329 152.715 17.0117 152.122 16.9451C151.077 15.7759 153.686 15.5845 154.042 15.0123C153.793 14.8599 151.003 15.3715 152.053 14.1085C152.281 13.8343 153.867 13.9977 154.231 14.03C153.639 13.6513 151.017 12.8331 152.213 12.0042Z" fill="black" fill-opacity="0.988235"/>
+            <path d="M36.7811 12.0062C37.4997 11.9594 37.5659 12.7319 36.7688 13.058C36.0817 13.3391 35.3103 13.6898 34.6399 14.0117C35.2168 13.9861 37.522 13.6299 37.4217 14.5769C37.137 15.1235 35.5571 15.0211 35.0054 14.927L34.9604 14.9191L34.9071 14.9616C35.1273 15.4517 36.9517 15.639 37.2822 16.1969C37.3854 16.3712 37.3418 16.5021 37.297 16.6851C37.1537 16.8301 36.9982 17.0125 36.7606 16.9237C35.3797 16.4059 34.0517 15.7702 32.6973 15.1924C31.9784 14.8857 31.2554 14.4886 32.298 13.9269C32.8589 13.6247 33.5676 13.3404 34.1649 13.097C34.9888 12.7613 35.9357 12.26 36.7811 12.0062Z" fill="black"/>
+            <path d="M101.039 12.0062C101.758 11.9594 101.824 12.7319 101.027 13.058C100.34 13.3391 99.5681 13.6898 98.8977 14.0117C99.4747 13.9861 101.78 13.6299 101.68 14.5769C101.395 15.1235 99.8149 15.0211 99.2632 14.927L99.2182 14.9191L99.1649 14.9616C99.3852 15.4517 101.21 15.639 101.54 16.1969C101.643 16.3712 101.6 16.5021 101.555 16.6851C101.412 16.8301 101.256 17.0125 101.018 16.9237C99.6376 16.4059 98.3095 15.7702 96.9551 15.1924C96.2362 14.8857 95.5132 14.4886 96.5558 13.9269C97.1167 13.6247 97.8254 13.3404 98.4228 13.097C99.2467 12.7613 100.193 12.26 101.039 12.0062Z" fill="black"/>
+            <path d="M164.591 12.0062C165.309 11.9594 165.376 12.7319 164.578 13.058C163.891 13.3391 163.12 13.6898 162.449 14.0117C163.026 13.9861 165.332 13.6299 165.231 14.5769C164.947 15.1235 163.367 15.0211 162.815 14.927L162.77 14.9191L162.717 14.9616C162.937 15.4517 164.761 15.639 165.092 16.1969C165.195 16.3712 165.151 16.5021 165.107 16.6851C164.963 16.8301 164.808 17.0125 164.57 16.9237C163.189 16.4059 161.861 15.7702 160.507 15.1924C159.788 14.8857 159.065 14.4886 160.108 13.9269C160.668 13.6247 161.377 13.3404 161.975 13.097C162.798 12.7613 163.745 12.26 164.591 12.0062Z" fill="black"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="card this-week-card">
+      <h2>This week</h2>
+      <p class="spent">$300 spent</p>
+      <p class="comparison">$100 lower than last week ↓</p>
+      <p class="context">You ordered considerably less takeout this week</p>
+      <div class="bar-chart">
+        <div class="bar-group">
+          <span class="bar-value">$770</span>
+          <div class="bar-column">
+            <div class="bar week1" role="img" aria-label="Week 1 $770"></div>
+          </div>
+          <span class="bar-label">Week 1</span>
+        </div>
+        <div class="bar-group">
+          <span class="bar-value">$400</span>
+          <div class="bar-column">
+            <div class="bar week2" role="img" aria-label="Week 2 $400"></div>
+          </div>
+          <span class="bar-label">Week 2</span>
+        </div>
+        <div class="bar-group">
+          <span class="bar-value">$300</span>
+          <div class="bar-column">
+            <div class="bar this-week" role="img" aria-label="This week $300"></div>
+          </div>
+          <span class="bar-label">This week</span>
+        </div>
+        <div class="bar-group">
+          <span class="bar-value">$0</span>
+          <div class="bar-column">
+            <div class="bar week4" role="img" aria-label="Week 4 $0"></div>
+          </div>
+          <span class="bar-label">Week 4</span>
+        </div>
+      </div>
+      <div class="takeout-visual">
+        <img src="assets/takeout-illustration.png" alt="Takeout meals reduced from 6 to 2 — about 4 meals saved">
+      </div>
+      <p class="takeout-caption">About the price of <span class="highlight">4 takeout meals!</span> saved.</p>
+    </section>
+
+    <h2 class="section-title">You may want to look into these</h2>
+    <div class="pig-cards-scroll" role="region" aria-label="Budget by category">
+      <article class="pig-card lifestyle-card">
+        <div class="pig-card-header">
+          <img src="assets/pig-sweater.png" alt="" class="pig-icon" width="40" height="40">
+          <h3>Lifestyle</h3>
+        </div>
+        <div class="progress-outer">
+          <div class="progress-fill lifestyle" role="img" aria-label="About 78% of lifestyle budget used"></div>
+        </div>
+        <p class="left-text">$12 left for 9 days</p>
+      </article>
+      <article class="pig-card eating-out-card">
+        <div class="pig-card-header">
+          <img src="assets/pig-bowtie.png" alt="" class="pig-icon" width="40" height="40">
+          <h3>Eating Out</h3>
+        </div>
+        <div class="progress-outer">
+          <div class="progress-fill eating-out" role="img" aria-label="About 80% of eating out budget used"></div>
+        </div>
+        <p class="left-text">$18 left for 9 days</p>
+      </article>
+    </div>
+  </main>
+
+  <nav class="bottom-nav" aria-label="Main">
+    <a href="index.html" class="nav-item active" aria-current="page">
+      <svg class="nav-icon-home" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <path d="M12 2L2 10v12h8v-7h4v7h8V10L12 2z"/>
+      </svg>
+      Home
+    </a>
+    <a href="budget.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="8" stroke-width="4"/>
+      </svg>
+      Budget
+    </a>
+    <a href="goals.html" class="nav-item">
+      <svg class="nav-icon-goals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <circle cx="12" cy="12" r="6"/>
+        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+      </svg>
+      Goals
+    </a>
+    <a href="insights.html" class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="2 18 6 14 10 18 14 10 18 14 22 6"/>
+      </svg>
+      Insights
+    </a>
+  </nav>
+  <a href="budget.html?add=1" class="fab" aria-label="Add">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </a>
+  </div><!-- .phone-frame -->
+
+  <script>
+    document.querySelectorAll('.segmented').forEach(seg => {
+      seg.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          seg.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
+    });
+  </script>
+</body>
+</html>

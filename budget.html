@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>March budget — Budget App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="budget.css">
+</head>
+<body>
+  <div class="phone-frame">
+    <div class="status-bar">9:41</div>
+
+    <header class="budget-header">
+      <h1>March budget</h1>
+    </header>
+
+    <main>
+      <section class="budget-card">
+        <div class="toggle-row">
+          <div class="toggle-wrap">
+            <button type="button" class="active" data-view="plan">Plan</button>
+            <button type="button" data-view="spent">Spent</button>
+          </div>
+        </div>
+        <div class="month-nav">
+          <button type="button" aria-label="Previous month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg></button>
+          <span>March 2026</span>
+          <button type="button" aria-label="Next month"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+        <div class="budget-plan-view active">
+        <div class="donut-row">
+          <div class="donut-wrap" aria-hidden="true">
+            <svg viewBox="0 0 36 36">
+              <circle cx="18" cy="18" r="14" fill="none" stroke="var(--chart-orange)" stroke-width="6" stroke-dasharray="3.5 84.5"/>
+              <circle cx="18" cy="18" r="14" fill="none" stroke="var(--chart-blue)" stroke-width="6" stroke-dasharray="9.7 78.3" stroke-dashoffset="-3.5"/>
+              <circle cx="18" cy="18" r="14" fill="none" stroke="var(--chart-yellow)" stroke-width="6" stroke-dasharray="4.4 83.6" stroke-dashoffset="-13.2"/>
+              <circle cx="18" cy="18" r="14" fill="none" stroke="var(--chart-maroon)" stroke-width="6" stroke-dasharray="70.4 17.6" stroke-dashoffset="-17.6"/>
+            </svg>
+          </div>
+          <div class="donut-summary">
+            <p class="label">Total planned expenses</p>
+            <p class="total">$1,870</p>
+            <p class="left">$0 left to budget</p>
+          </div>
+        </div>
+        <div class="category-list">
+          <a href="budget-entertainment.html" class="category-row">
+            <div class="category-icon">
+              <img src="assets/pig-plaid-entertainment.png" alt="">
+            </div>
+            <span class="category-name">Entertainment</span>
+            <span class="category-pct">4%</span>
+            <span class="category-amount">$80</span>
+          </a>
+          <a href="budget-eating-out.html" class="category-row">
+            <div class="category-icon">
+              <img src="assets/pig-bowtie.png" alt="">
+            </div>
+            <span class="category-name">Eating out</span>
+            <span class="category-pct">11%</span>
+            <span class="category-amount">$200</span>
+          </a>
+          <a href="budget-travel.html" class="category-row">
+            <div class="category-icon">
+              <img src="assets/pig-sweater.png" alt="">
+            </div>
+            <span class="category-name">Travel</span>
+            <span class="category-pct">5%</span>
+            <span class="category-amount">$90</span>
+          </a>
+          <a href="budget-bills.html" class="category-row">
+            <div class="category-icon">
+              <img src="assets/pig-scarf.png" alt="">
+            </div>
+            <span class="category-name">Bills and utilities</span>
+            <span class="category-pct">80%</span>
+            <span class="category-amount">$1,500</span>
+          </a>
+        </div>
+        <a href="#" class="add-category" onclick="var o=document.getElementById('addCategoryOverlay'); if(o){ o.classList.add('is-open'); o.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; } return false;">+ Add category</a>
+        </div>
+        <div class="budget-spent-view">
+          <div class="spent-summary-card">
+            <div class="donut-row">
+              <div class="donut-wrap spent-donut-wrap" aria-hidden="true">
+                <svg viewBox="0 0 36 36">
+                  <circle cx="18" cy="18" r="14" fill="none" stroke-width="6" stroke-dasharray="70 30" class="spent-fill"/>
+                  <circle cx="18" cy="18" r="14" fill="none" stroke-width="6" stroke-dasharray="30 70" stroke-dashoffset="-70"/>
+                </svg>
+              </div>
+              <div class="donut-summary">
+                <p class="label">Total spent expenses</p>
+                <p class="total">$1,800</p>
+                <p class="left">$200 left for 9 days</p>
+              </div>
+            </div>
+          </div>
+          <h2 class="categories-heading">Categories</h2>
+          <a href="budget-entertainment.html" class="spent-category-card">
+            <div class="spent-category-header">
+              <div class="spent-category-icon"><img src="assets/pig-plaid-entertainment.png" alt=""></div>
+              <span class="spent-category-name">Entertainment</span>
+            </div>
+            <div class="spent-category-bar">
+              <div class="spent-category-bar-fill" style="width: 86%; background: var(--chart-orange);"></div>
+            </div>
+            <p class="spent-category-left">$70 left for 9 days</p>
+          </a>
+          <a href="budget-eating-out.html" class="spent-category-card">
+            <div class="spent-category-header">
+              <div class="spent-category-icon"><img src="assets/pig-bowtie.png" alt=""></div>
+              <span class="spent-category-name">Eating out</span>
+            </div>
+            <div class="spent-category-bar">
+              <div class="spent-category-bar-fill" style="width: 90%; background: var(--chart-blue);"></div>
+            </div>
+            <p class="spent-category-left">$40 left for 9 days</p>
+          </a>
+          <a href="budget-travel.html" class="spent-category-card">
+            <div class="spent-category-header">
+              <div class="spent-category-icon"><img src="assets/pig-sweater.png" alt=""></div>
+              <span class="spent-category-name">Travel</span>
+            </div>
+            <div class="spent-category-bar">
+              <div class="spent-category-bar-fill" style="width: 67%; background: var(--chart-yellow);"></div>
+            </div>
+            <p class="spent-category-left">$30 left for 9 days</p>
+          </a>
+          <a href="budget-bills.html" class="spent-category-card">
+            <div class="spent-category-header">
+              <div class="spent-category-icon"><img src="assets/pig-scarf.png" alt=""></div>
+              <span class="spent-category-name">Bills and utilities</span>
+            </div>
+            <div class="spent-category-bar">
+              <div class="spent-category-bar-fill" style="width: 96%; background: var(--chart-maroon);"></div>
+            </div>
+            <p class="spent-category-left">$60 left for 9 days</p>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <button type="button" class="fab" aria-label="Add">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+
+    <div class="add-overlay" id="addOverlay" aria-hidden="true">
+      <div class="add-modal">
+        <h2>Add expense</h2>
+        <div class="add-form">
+          <label for="addDesc">Description</label>
+          <input type="text" id="addDesc" placeholder="e.g. Coffee, Groceries" autocomplete="off">
+          <label for="addAmount">Amount ($)</label>
+          <input type="number" id="addAmount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+        </div>
+        <div class="add-drag-section">
+          <p>Drag to a category</p>
+          <div class="add-draggable-chip" id="addChip">
+            <span class="chip-label">Item</span>
+            <span class="chip-amount">$0</span>
+          </div>
+        </div>
+        <div class="add-categories-wrap" id="addCategoriesScroll">
+          <div class="add-category-card" data-category="entertainment" data-label="Entertainment" style="background:#F59E0B;">
+            <img src="assets/pig-plaid-entertainment.png" alt="">
+            <span>Fun</span>
+          </div>
+          <div class="add-category-card" data-category="eating-out" data-label="Eating out" style="background:#7C3AED;">
+            <img src="assets/pig-bowtie.png" alt="">
+            <span>Eat out</span>
+          </div>
+          <div class="add-category-card" data-category="travel" data-label="Travel" style="background:#EAB308;">
+            <img src="assets/pig-sweater.png" alt="">
+            <span>Travel</span>
+          </div>
+          <div class="add-category-card" data-category="bills" data-label="Bills" style="background:#DC2626;">
+            <img src="assets/pig-scarf.png" alt="">
+            <span>Bills</span>
+          </div>
+          <div class="add-category-card" data-category="groceries" data-label="Groceries" style="background:#0D9488;">
+            <img src="assets/pig-cowboy.png" alt="">
+            <span>Groceries</span>
+          </div>
+          <div class="add-category-card" data-category="lifestyle" data-label="Lifestyle" style="background:#DB2777;">
+            <img src="assets/pig-sweater.png" alt="">
+            <span>Lifestyle</span>
+          </div>
+          <div class="add-category-card" data-category="transport" data-label="Transport" style="background:#2563EB;">
+            <img src="assets/pig-bowtie.png" alt="">
+            <span>Transport</span>
+          </div>
+          <div class="add-category-card" data-category="savings" data-label="Savings" style="background:#059669;">
+            <img src="assets/pig-scarf.png" alt="">
+            <span>Savings</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="add-celebration" id="addCelebration" aria-hidden="true">
+      <div class="add-celebration-particles" id="addParticles"></div>
+      <div class="add-celebration-inner">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        <span class="add-celebration-text" id="addCelebrationText">Added!</span>
+      </div>
+    </div>
+
+    <div class="add-category-overlay" id="addCategoryOverlay" aria-hidden="true">
+      <div class="add-category-modal">
+        <h2>Add category</h2>
+        <form class="add-category-form" id="addCategoryForm">
+          <label for="newCategoryName">Category name</label>
+          <input type="text" id="newCategoryName" placeholder="e.g. Groceries" autocomplete="off">
+          <label class="outfit-label">Choose an outfit for your piggy bank</label>
+          <div class="outfit-grid" id="outfitGrid" role="group" aria-label="Choose an outfit">
+            <button type="button" class="outfit-option selected" data-outfit="santa-hat" aria-pressed="true" title="Santa hat">
+              <img src="assets/outfits/santa-hat.png" alt="Santa hat">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="beanie" aria-pressed="false" title="Beanie">
+              <img src="assets/outfits/beanie.png" alt="Beanie">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="sun-hat" aria-pressed="false" title="Sun hat">
+              <img src="assets/outfits/sun-hat.png" alt="Sun hat">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="baseball-cap" aria-pressed="false" title="Baseball cap">
+              <img src="assets/outfits/baseball-cap.png" alt="Baseball cap">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="plaid-scarf" aria-pressed="false" title="Plaid scarf">
+              <img src="assets/outfits/plaid-scarf.png" alt="Plaid scarf">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="red-scarf" aria-pressed="false" title="Red scarf">
+              <img src="assets/outfits/red-scarf.png" alt="Red scarf">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="scarf-stars-lavender" aria-pressed="false" title="Scarf with stars">
+              <img src="assets/outfits/scarf-stars-lavender.png" alt="Scarf with stars">
+            </button>
+            <button type="button" class="outfit-option" data-outfit="scarf-stars-blue" aria-pressed="false" title="Blue scarf with stars">
+              <img src="assets/outfits/scarf-stars-blue.png" alt="Blue scarf with stars">
+            </button>
+          </div>
+          <label for="newCategoryAmount">Amount ($)</label>
+          <input type="number" id="newCategoryAmount" placeholder="0" value="0" step="0.01" min="0" inputmode="decimal">
+          <div class="add-category-actions">
+            <button type="button" class="btn-cancel" id="addCategoryCancel">Cancel</button>
+            <button type="submit" class="btn-add-category">Add category</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="scan-overlay" id="scanOverlay" aria-hidden="true">
+      <div class="scan-header">
+        <h2 id="scanTitle">Scan receipt</h2>
+        <button type="button" class="btn-icon" id="scanClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="scan-body" id="scanBody">
+        <div class="scan-view" id="scanView">
+          <div class="scan-frame" id="scanFrame">
+            <div class="scan-frame-placeholder">Point at receipt or product</div>
+            <input type="file" id="scanFileInput" accept="image/*" capture="environment">
+          </div>
+          <p class="scan-error-msg" id="scanErrorMsg" style="display:none;">Place within the box</p>
+          <div class="scan-capture-wrap">
+            <button type="button" class="scan-capture-btn" id="scanCaptureBtn" aria-label="Capture">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="scan-record-view" id="scanRecordView" style="display:none;">
+          <img class="scan-record-img" id="scanRecordImg" alt="">
+          <div class="scan-record-field">
+            <label for="scanAmount">Amount ($)</label>
+            <input type="number" id="scanAmount" placeholder="0.00" step="0.01" min="0" inputmode="decimal">
+          </div>
+          <div class="scan-record-field">
+            <label for="scanCategory">Category</label>
+            <input type="text" id="scanCategory" placeholder="e.g. Groceries" value="Groceries">
+          </div>
+          <button type="button" class="scan-record-btn" id="scanRecordBtn">Record</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Main">
+      <a href="index.html" class="nav-item">
+        <svg class="nav-icon-home" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+          <path d="M12 2L2 10v12h8v-7h4v7h8V10L12 2z"/>
+        </svg>
+        Home
+      </a>
+      <a href="budget.html" class="nav-item active" aria-current="page">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="8" stroke-width="4"/>
+        </svg>
+        Budget
+      </a>
+      <a href="goals.html" class="nav-item">
+        <svg class="nav-icon-goals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <circle cx="12" cy="12" r="6"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+        Goals
+      </a>
+      <a href="insights.html" class="nav-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="2 18 6 14 10 18 14 10 18 14 22 6"/>
+        </svg>
+        Insights
+      </a>
+    </nav>
+  </div>
+  <script>
+    document.querySelectorAll('.toggle-wrap').forEach(wrap => {
+      wrap.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', function() {
+          var view = this.getAttribute('data-view');
+          wrap.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          document.querySelector('.budget-plan-view').classList.toggle('active', view === 'plan');
+          document.querySelector('.budget-spent-view').classList.toggle('active', view === 'spent');
+        });
+      });
+    });
+
+    (function() {
+      var overlay = document.getElementById('addOverlay');
+      var modal = overlay && overlay.querySelector('.add-modal');
+      var fab = document.querySelector('.fab');
+      var addDesc = document.getElementById('addDesc');
+      var addAmount = document.getElementById('addAmount');
+      var chip = document.getElementById('addChip');
+      var categoriesScroll = document.getElementById('addCategoriesScroll');
+      var celebration = document.getElementById('addCelebration');
+      var particlesEl = document.getElementById('addParticles');
+
+      function openAdd() {
+        if (!overlay) return;
+        overlay.classList.add('is-open');
+        overlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        if (addDesc) addDesc.value = '';
+        if (addAmount) addAmount.value = '';
+        if (chip) {
+          chip.style.position = '';
+          chip.style.left = '';
+          chip.style.top = '';
+          chip.style.margin = '';
+          chip.style.zIndex = '';
+          chip.classList.remove('dragging');
+        }
+        updateChipText();
+        if (addDesc) setTimeout(function() { addDesc.focus(); }, 100);
+      }
+
+      function closeAdd() {
+        if (!overlay) return;
+        overlay.classList.remove('is-open');
+        overlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        clearDropState();
+      }
+
+      function updateChipText() {
+        if (!chip) return;
+        var label = (addDesc && addDesc.value.trim()) || 'Item';
+        var amount = (addAmount && addAmount.value.trim()) || '0';
+        var num = parseFloat(amount);
+        if (isNaN(num)) num = 0;
+        chip.querySelector('.chip-label').textContent = label;
+        chip.querySelector('.chip-amount').textContent = '$' + (num.toFixed(2));
+      }
+
+      if (addDesc) addDesc.addEventListener('input', updateChipText);
+      if (addAmount) addAmount.addEventListener('input', updateChipText);
+
+      function clearDropState() {
+        if (!categoriesScroll) return;
+        categoriesScroll.querySelectorAll('.add-category-card').forEach(function(card) {
+          card.classList.remove('drop-target-active', 'drop-target-dimmed');
+        });
+      }
+
+      function setDropTarget(activeCard) {
+        categoriesScroll.querySelectorAll('.add-category-card').forEach(function(card) {
+          if (card === activeCard) {
+            card.classList.add('drop-target-active');
+            card.classList.remove('drop-target-dimmed');
+          } else {
+            card.classList.remove('drop-target-active');
+            card.classList.add('drop-target-dimmed');
+          }
+        });
+      }
+
+      if (fab) fab.addEventListener('click', openAdd);
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeAdd();
+      });
+
+      var addCategoryLink = document.querySelector('a.add-category');
+      var addCategoryOverlay = document.getElementById('addCategoryOverlay');
+      var addCategoryCancel = document.getElementById('addCategoryCancel');
+      var outfitGrid = document.getElementById('outfitGrid');
+
+      function openAddCategoryModal() {
+        if (!addCategoryOverlay) return;
+        addCategoryOverlay.classList.add('is-open');
+        addCategoryOverlay.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeAddCategoryModal() {
+        if (!addCategoryOverlay) return;
+        addCategoryOverlay.classList.remove('is-open');
+        addCategoryOverlay.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      if (addCategoryLink) {
+        addCategoryLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          openAddCategoryModal();
+        });
+      }
+      if (addCategoryOverlay) {
+        addCategoryOverlay.addEventListener('click', function(e) {
+          if (e.target === addCategoryOverlay) closeAddCategoryModal();
+        });
+      }
+      if (addCategoryCancel) addCategoryCancel.addEventListener('click', closeAddCategoryModal);
+
+      if (outfitGrid) {
+        outfitGrid.querySelectorAll('.outfit-option').forEach(function(btn) {
+          btn.addEventListener('click', function() {
+            outfitGrid.querySelectorAll('.outfit-option').forEach(function(b) {
+              b.classList.remove('selected');
+              b.setAttribute('aria-pressed', 'false');
+            });
+            this.classList.add('selected');
+            this.setAttribute('aria-pressed', 'true');
+          });
+        });
+      }
+
+      var addCategoryForm = document.getElementById('addCategoryForm');
+      if (addCategoryForm) {
+        addCategoryForm.addEventListener('submit', function(e) {
+          e.preventDefault();
+          var name = document.getElementById('newCategoryName') && document.getElementById('newCategoryName').value.trim();
+          var amount = document.getElementById('newCategoryAmount') && document.getElementById('newCategoryAmount').value;
+          var selected = outfitGrid && outfitGrid.querySelector('.outfit-option.selected');
+          var outfit = selected ? selected.getAttribute('data-outfit') : '';
+          closeAddCategoryModal();
+        });
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('add') === '1') { openAdd(); history.replaceState({}, '', window.location.pathname); }
+      if (params.get('scan') === '1') {
+        var so = document.getElementById('scanOverlay');
+        if (so) { so.classList.add('is-open'); so.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+        history.replaceState({}, '', window.location.pathname);
+      }
+
+      if (chip && categoriesScroll) {
+        var cards = categoriesScroll.querySelectorAll('.add-category-card');
+        var dragStartX, dragStartY, chipStartLeft, chipStartTop;
+
+        function getClientXY(e) {
+          if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+          return { x: e.clientX, y: e.clientY };
+        }
+        function cardAt(x, y) {
+          var found = null;
+          cards.forEach(function(card) {
+            var r = card.getBoundingClientRect();
+            if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) found = card;
+          });
+          return found;
+        }
+        function finishDrag(clientX, clientY) {
+          chip.classList.remove('dragging');
+          chip.style.position = '';
+          chip.style.left = '';
+          chip.style.top = '';
+          chip.style.margin = '';
+          chip.style.zIndex = '';
+          var found = cardAt(clientX, clientY);
+          clearDropState();
+          if (found) {
+            var label = found.getAttribute('data-label') || found.getAttribute('data-category');
+            showCelebration(label, function() { closeAdd(); });
+          }
+        }
+
+        chip.addEventListener('mousedown', function(e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          var rect = chip.getBoundingClientRect();
+          dragStartX = e.clientX;
+          dragStartY = e.clientY;
+          chipStartLeft = rect.left;
+          chipStartTop = rect.top;
+          chip.classList.add('dragging');
+          chip.style.position = 'fixed';
+          chip.style.left = rect.left + 'px';
+          chip.style.top = rect.top + 'px';
+          chip.style.margin = '0';
+          chip.style.zIndex = '100';
+          setDropTarget(null);
+        });
+        chip.addEventListener('touchstart', function(e) {
+          if (e.touches.length !== 1) return;
+          var rect = chip.getBoundingClientRect();
+          var t = e.touches[0];
+          dragStartX = t.clientX;
+          dragStartY = t.clientY;
+          chipStartLeft = rect.left;
+          chipStartTop = rect.top;
+          chip.classList.add('dragging');
+          chip.style.position = 'fixed';
+          chip.style.left = rect.left + 'px';
+          chip.style.top = rect.top + 'px';
+          chip.style.margin = '0';
+          chip.style.zIndex = '100';
+          setDropTarget(null);
+        }, { passive: true });
+
+        document.addEventListener('mousemove', function(e) {
+          if (!chip.classList.contains('dragging')) return;
+          var dx = e.clientX - dragStartX;
+          var dy = e.clientY - dragStartY;
+          chip.style.left = (chipStartLeft + dx) + 'px';
+          chip.style.top = (chipStartTop + dy) + 'px';
+          setDropTarget(cardAt(e.clientX, e.clientY));
+        });
+        document.addEventListener('touchmove', function(e) {
+          if (!chip.classList.contains('dragging') || e.touches.length !== 1) return;
+          e.preventDefault();
+          var t = e.touches[0];
+          var dx = t.clientX - dragStartX;
+          var dy = t.clientY - dragStartY;
+          chip.style.left = (chipStartLeft + dx) + 'px';
+          chip.style.top = (chipStartTop + dy) + 'px';
+          setDropTarget(cardAt(t.clientX, t.clientY));
+        }, { passive: false });
+
+        document.addEventListener('mouseup', function(e) {
+          if (!chip.classList.contains('dragging')) return;
+          finishDrag(e.clientX, e.clientY);
+        });
+        document.addEventListener('touchend', function(e) {
+          if (!chip.classList.contains('dragging')) return;
+          var x = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : 0;
+          var y = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : 0;
+          finishDrag(x, y);
+        }, { passive: true });
+      }
+
+      function showCelebration(categoryLabel, done) {
+        var t = document.getElementById('addCelebrationText');
+        if (t) t.textContent = categoryLabel ? 'Added to ' + categoryLabel + '!' : 'Added!';
+        if (!celebration || !particlesEl) {
+          if (done) setTimeout(done, 400);
+          return;
+        }
+        celebration.classList.add('is-active');
+        var count = 12;
+        particlesEl.innerHTML = '';
+        for (var i = 0; i < count; i++) {
+          var angle = (i / count) * Math.PI * 2;
+          var dist = 80 + Math.random() * 40;
+          var bx = Math.cos(angle) * dist;
+          var by = Math.sin(angle) * dist;
+          var s = document.createElement('span');
+          s.style.setProperty('--bx', bx + 'px');
+          s.style.setProperty('--by', by + 'px');
+          s.style.animationDelay = (i * 0.02) + 's';
+          particlesEl.appendChild(s);
+        }
+        setTimeout(function() {
+          celebration.classList.remove('is-active');
+          if (typeof done === 'function') done();
+        }, 800);
+      }
+
+      var scanOverlay = document.getElementById('scanOverlay');
+      var scanBtn = document.getElementById('scanBtn');
+      var scanClose = document.getElementById('scanClose');
+      var scanFileInput = document.getElementById('scanFileInput');
+      var scanCaptureBtn = document.getElementById('scanCaptureBtn');
+      var scanFrame = document.getElementById('scanFrame');
+      var scanErrorMsg = document.getElementById('scanErrorMsg');
+      var scanView = document.getElementById('scanView');
+      var scanRecordView = document.getElementById('scanRecordView');
+      var scanRecordImg = document.getElementById('scanRecordImg');
+      var scanAmount = document.getElementById('scanAmount');
+      var scanCategory = document.getElementById('scanCategory');
+      var scanRecordBtn = document.getElementById('scanRecordBtn');
+
+      if (scanBtn) scanBtn.addEventListener('click', function() {
+        if (scanOverlay) {
+          scanOverlay.classList.add('is-open');
+          scanOverlay.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+          scanView.style.display = '';
+          scanRecordView.style.display = 'none';
+          scanFrame.classList.remove('has-image');
+          scanFrame.querySelector('.scan-frame-placeholder').style.display = '';
+          if (scanFrame.querySelector('img')) scanFrame.querySelector('img').remove();
+          scanErrorMsg.style.display = 'none';
+          scanFileInput.value = '';
+        }
+      });
+      if (scanClose) scanClose.addEventListener('click', function() {
+        if (scanOverlay) {
+          scanOverlay.classList.remove('is-open');
+          scanOverlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      });
+      if (scanCaptureBtn) scanCaptureBtn.addEventListener('click', function() { scanFileInput.click(); });
+      if (scanFileInput) scanFileInput.addEventListener('change', function() {
+        var file = this.files && this.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          scanErrorMsg.style.display = 'none';
+          var placeholder = scanFrame.querySelector('.scan-frame-placeholder');
+          if (placeholder) placeholder.style.display = 'none';
+          var img = scanFrame.querySelector('img');
+          if (img) img.remove();
+          img = document.createElement('img');
+          img.src = e.target.result;
+          img.alt = 'Scanned';
+          scanFrame.appendChild(img);
+          scanFrame.classList.add('has-image');
+          scanRecordImg.src = e.target.result;
+          scanView.style.display = 'none';
+          scanRecordView.style.display = '';
+        };
+        reader.readAsDataURL(file);
+      });
+      if (scanRecordBtn) scanRecordBtn.addEventListener('click', function() {
+        if (scanOverlay) {
+          scanOverlay.classList.remove('is-open');
+          scanOverlay.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+        var cat = scanCategory && scanCategory.value ? scanCategory.value : 'Groceries';
+        var celebText = document.getElementById('addCelebrationText');
+        if (celebration && celebText) {
+          celebText.textContent = 'Added to ' + cat + '!';
+          celebration.classList.add('is-active');
+          setTimeout(function() { celebration.classList.remove('is-active'); }, 800);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
